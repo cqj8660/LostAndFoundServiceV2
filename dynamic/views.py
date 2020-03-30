@@ -236,3 +236,19 @@ def reject(request):
         res = {'code': -2, 'msg': e.__str__(), 'data': []}
         utils.log('ERROR', 'dynamic reject', res['msg'], data=params)
     return JsonResponse(res)
+
+@csrf_exempt
+def ocrPrintedText(request):
+    params = request.POST.dict()
+    required = {
+        'access_token': {'requried': False},
+        'img_url': {'requried': False},
+        'img': {'requried': False}
+    }
+    check_res = check(required, params)
+    if check_res is None or check_res['code'] != 0:
+        return JsonResponse(check_res)
+
+    ocr_res=client.ocrPrintedText(params)
+
+    return JsonResponse(ocr_res)

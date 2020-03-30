@@ -22,9 +22,11 @@ def sync_user():
             payload['phone']=data['contact_value']
         payload['ctime']=data['ctime'].replace('T',' ').replace('Z','')
 
-        r=requests.post('http://127.0.0.1:8000/service/user/insert',data=payload)
+        r=requests.post('https://lostandfoundv2.yiwangchunyu.wang/service/user/insert',data=payload)
         print(r.json())
-        if i%10==0:
-            print(i,700)
+
+def sync_dynamic():
+    pass
 if __name__=='__main__':
-    sync_user()
+    # sync_user()
+    sync_dynamic()

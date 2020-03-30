@@ -7,6 +7,7 @@
 * [x] <a href='#apply'>apply</a>   
 * [x] <a href='#confirm'>confirm</a>    
 * [x] <a href='#reject'>reject</a>    
+* [x] <a href='#ocrPrintedText'>ocrPrintedText</a>    
 
 ## 接口文档   
 domain=‘http(s)://lostandfoundv2.yiwangchunyu.wang’   
@@ -284,12 +285,296 @@ params:
 |id | int | Y |  |
 |user_id | int | Y |  |
 
+
 return:
 ```json
 {
     "code": 0,
     "msg": "success",
     "data": {
+    }
+}
+```
+
+### <a name='ocrPrintedText'>ocrPrintedText</a> OCR   
+url = {domain}/service/dynamic/reject   
+method = post   
+params:   
+
+
+|   名称  | 类型 | 必须 | 备注 |
+| :-----| ----: | :----: | :----: |
+|img_url | string | Y | 要检测的图片 url，传这个则不用传 img 参数。 |
+|img | FormData | Y |  form-data 中媒体文件标识，有filename、filelength、content-type等信息，传这个则不用传 img_url。|
+
+[测试图片](https://lostandfoundv2.yiwangchunyu.wang/media/dynamic/2020/3/30/20200330190833_52537.jpg)
+
+return:
+```json
+{
+    "code": 0,
+    "msg": "success",
+    "data": {
+        "errcode": 0,
+        "errmsg": "ok",
+        "items": [
+            {
+                "text": "姓名",
+                "pos": {
+                    "left_top": {
+                        "x": 35,
+                        "y": 43
+                    },
+                    "right_top": {
+                        "x": 89,
+                        "y": 43
+                    },
+                    "right_bottom": {
+                        "x": 89,
+                        "y": 65
+                    },
+                    "left_bottom": {
+                        "x": 35,
+                        "y": 65
+                    }
+                }
+            },
+            {
+                "text": "爱新觉罗 · 玄烨",
+                "pos": {
+                    "left_top": {
+                        "x": 95,
+                        "y": 38
+                    },
+                    "right_top": {
+                        "x": 282,
+                        "y": 37
+                    },
+                    "right_bottom": {
+                        "x": 282,
+                        "y": 66
+                    },
+                    "left_bottom": {
+                        "x": 95,
+                        "y": 66
+                    }
+                }
+            },
+            {
+                "text": "性别",
+                "pos": {
+                    "left_top": {
+                        "x": 35,
+                        "y": 85
+                    },
+                    "right_top": {
+                        "x": 85,
+                        "y": 85
+                    },
+                    "right_bottom": {
+                        "x": 86,
+                        "y": 107
+                    },
+                    "left_bottom": {
+                        "x": 35,
+                        "y": 107
+                    }
+                }
+            },
+            {
+                "text": "男",
+                "pos": {
+                    "left_top": {
+                        "x": 96,
+                        "y": 85
+                    },
+                    "right_top": {
+                        "x": 125,
+                        "y": 85
+                    },
+                    "right_bottom": {
+                        "x": 126,
+                        "y": 110
+                    },
+                    "left_bottom": {
+                        "x": 96,
+                        "y": 110
+                    }
+                }
+            },
+            {
+                "text": "民族满",
+                "pos": {
+                    "left_top": {
+                        "x": 158,
+                        "y": 84
+                    },
+                    "right_top": {
+                        "x": 236,
+                        "y": 83
+                    },
+                    "right_bottom": {
+                        "x": 235,
+                        "y": 107
+                    },
+                    "left_bottom": {
+                        "x": 158,
+                        "y": 107
+                    }
+                }
+            },
+            {
+                "text": "出生",
+                "pos": {
+                    "left_top": {
+                        "x": 36,
+                        "y": 127
+                    },
+                    "right_top": {
+                        "x": 83,
+                        "y": 127
+                    },
+                    "right_bottom": {
+                        "x": 83,
+                        "y": 148
+                    },
+                    "left_bottom": {
+                        "x": 36,
+                        "y": 148
+                    }
+                }
+            },
+            {
+                "text": "1654年5月4日",
+                "pos": {
+                    "left_top": {
+                        "x": 99,
+                        "y": 127
+                    },
+                    "right_top": {
+                        "x": 286,
+                        "y": 126
+                    },
+                    "right_bottom": {
+                        "x": 286,
+                        "y": 149
+                    },
+                    "left_bottom": {
+                        "x": 100,
+                        "y": 149
+                    }
+                }
+            },
+            {
+                "text": "住址",
+                "pos": {
+                    "left_top": {
+                        "x": 35,
+                        "y": 172
+                    },
+                    "right_top": {
+                        "x": 86,
+                        "y": 173
+                    },
+                    "right_bottom": {
+                        "x": 85,
+                        "y": 193
+                    },
+                    "left_bottom": {
+                        "x": 35,
+                        "y": 193
+                    }
+                }
+            },
+            {
+                "text": "北京市东城区景山前街4号",
+                "pos": {
+                    "left_top": {
+                        "x": 96,
+                        "y": 171
+                    },
+                    "right_top": {
+                        "x": 345,
+                        "y": 170
+                    },
+                    "right_bottom": {
+                        "x": 346,
+                        "y": 196
+                    },
+                    "left_bottom": {
+                        "x": 96,
+                        "y": 194
+                    }
+                }
+            },
+            {
+                "text": "紫禁城乾清宫",
+                "pos": {
+                    "left_top": {
+                        "x": 96,
+                        "y": 206
+                    },
+                    "right_top": {
+                        "x": 221,
+                        "y": 206
+                    },
+                    "right_bottom": {
+                        "x": 221,
+                        "y": 231
+                    },
+                    "left_bottom": {
+                        "x": 96,
+                        "y": 231
+                    }
+                }
+            },
+            {
+                "text": "公民身份证号码",
+                "pos": {
+                    "left_top": {
+                        "x": 37,
+                        "y": 280
+                    },
+                    "right_top": {
+                        "x": 167,
+                        "y": 280
+                    },
+                    "right_bottom": {
+                        "x": 168,
+                        "y": 303
+                    },
+                    "left_bottom": {
+                        "x": 37,
+                        "y": 303
+                    }
+                }
+            },
+            {
+                "text": "000003165405049842",
+                "pos": {
+                    "left_top": {
+                        "x": 186,
+                        "y": 282
+                    },
+                    "right_top": {
+                        "x": 462,
+                        "y": 282
+                    },
+                    "right_bottom": {
+                        "x": 462,
+                        "y": 303
+                    },
+                    "left_bottom": {
+                        "x": 185,
+                        "y": 303
+                    }
+                }
+            }
+        ],
+        "img_size": {
+            "w": 544,
+            "h": 336
+        }
     }
 }
 ```

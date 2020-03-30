@@ -7,7 +7,10 @@ from django.views.decorators.csrf import csrf_exempt
 
 from LostAndFoundServiceV2.settings import URL_PREFIX
 from lib.utils import log
-
+weapp={
+        'appid':'wxd8d5a2f6fa7f1878',
+        'secret':'c1377133ab2c26acf453a0d7ed877710',
+    }
 
 def studentLogin(stu_id, stu_pwd):
     try:
@@ -37,6 +40,48 @@ def getOpenid(code):
         traceback.print_exc()
         return {'code':-1,'msg':'timeout | getopenid failed!','data':[]}
     return {'code':0, 'msg':'success','data':json.loads(r.text)}
+
+def authGetAccessToken():
+    data = {
+        'appid': 'wxd8d5a2f6fa7f1878',
+        'secret': 'c1377133ab2c26acf453a0d7ed877710',
+        'grant_type': 'client_credential',
+    }
+    try:
+        r = requests.get('https://api.weixin.qq.com/cgi-bin/token',params=data)
+        r=r.json()
+    except Exception as e:
+        log("ERROR",'@client authGetAccessToken',e.__str__(),data=[data])
+        r={}
+    finally:
+        if 'access_token' in r:
+            return {'code':0,'msg':'success','data':r}
+        else:
+            return {'code': -2, 'msg': 'failed to get access_token', 'data': []}
+
+
+def ocrPrintedText(params):
+    if 'access_token' not in params:
+        at_res=authGetAccessToken()
+        if at_res is None or at_res['code']!=0:
+            return at_res
+        params['access_token']=at_res['data']['access_token']
+    try:
+        r = requests.post('https://api.weixin.qq.com/cv/ocr/comm', data=params)
+        r = r.json()
+        res = {
+            'code': 0,
+            'msg': 'success',
+            'data': r
+        }
+    except Exception as e:
+        log("ERROR",'@client ocrPrintedText',e.__str__(),data=[params])
+        res = {
+            'code': -2,
+            'msg': 'failed to call ocrPrintedText',
+            'data': {}
+        }
+    return res
 
 def rpc(fc,data):
     url = URL_PREFIX+'/service/' + fc

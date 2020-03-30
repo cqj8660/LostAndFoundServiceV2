@@ -11,4 +11,5 @@ urlpatterns = [
     re_path(r'^apply$', views.apply),
     re_path(r'^confirm$', views.confirm),
     re_path(r'^reject$', views.reject),
+    re_path(r'^ocrPrintedText$', views.ocrPrintedText),
 ]
