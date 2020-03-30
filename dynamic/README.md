@@ -297,7 +297,8 @@ return:
 ```
 
 ### <a name='ocrPrintedText'>ocrPrintedText</a> OCR   
-url = {domain}/service/dynamic/reject   
+url = {domain}/service/dynamic/ocrPrintedText
+   
 method = post   
 params:   
 

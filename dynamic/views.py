@@ -1,3 +1,5 @@
+import datetime
+import json
 
 from django.http import JsonResponse
 from django.shortcuts import render
@@ -7,6 +9,8 @@ from django.views.decorators.csrf import csrf_exempt
 
 from dynamic.models import Category, Dynamic
 from lib import client, sms, utils
+from lib.client import rpc
+from lib.utils import log
 from lib.view import formatQuerySet, check
 
 
@@ -14,7 +18,7 @@ from lib.view import formatQuerySet, check
 def categories(request):
     res={'code':0, 'msg':'success', 'data':[]}
     try:
-        categpries=Category.objects.all()
+        categpries=Category.objects.filter(status=1)
         categpries=formatQuerySet(categpries)
         res['data']=categpries
     except Exception as e:
@@ -35,26 +39,34 @@ def create(request):
         'images' : {'required':False},
         'location' : {'required':False},
         'meta' : {'required':False},
+        'ctime': {'required': False},
     }
     check_res=check(required,params)
     if check_res is None or check_res['code']!=0:
         return JsonResponse(check_res)
 
     try:
-        Dynamic.objects.create(**params)
+        if 'ctime' in params:
+            params['ctime'] = datetime.datetime.strptime(params['ctime'], "%Y-%m-%d %H:%M:%S")
+        dynamic=Dynamic.objects.create(**params)
         #校园卡专区
         if int(params.get('type',0))==2 and int(params.get('category',0))==1: #
+            utils.log('INFO', 'there is a student IDcard found', '', data=params)
             if params.get('meta',False) and len(params['meta'])>2: #提取学号
                 #提取手机号
                 rpc_res=client.rpc('user/get',{'stu_id':params['meta']})
+                utils.log('INFO', 'there is a student IDcard found, loser info', '',data=rpc_res)
                 if rpc_res is None or rpc_res['code']!=0:
                     utils.log('ERROR','dynamic create', 'get use phone NO failed.', data=rpc_res)
-                elif len(rpc_res['data']['phone'])>2:
-                    sms.send_for_loser(
-                        phoneNO=rpc_res['data']['phone'],
-                        name=rpc_res['data']['name'],
-                        good_name=params['title']
-                    )
+                else:
+                    dynamic.belongsTo=rpc_res['data']['id']
+                    dynamic.save()
+                    if len(rpc_res['data']['phone'])>2:
+                        sms.send_for_loser(
+                            phoneNO=rpc_res['data']['phone'],
+                            name=rpc_res['data']['name'],
+                            good_name=params['title']
+                        )
 
     except Exception as e:
         res={'code':-2, 'msg':e.__str__(), 'data':[]}

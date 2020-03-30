@@ -13,6 +13,7 @@ from django.views.decorators.csrf import csrf_exempt
 
 from LostAndFoundServiceV2 import settings
 from LostAndFoundServiceV2.settings import URL_PREFIX
+from lib.view import check
 
 
 @csrf_exempt
@@ -71,4 +72,35 @@ def dynamicImg(request):
                 res['code']=-2
                 res['msg']=e
             res['data']=json.dumps(res['data'])
+    return JsonResponse(res)
+
+@csrf_exempt
+def dynamicImgByUrl(request):
+    res = {'code': 0, 'msg': 'success', 'data': []}
+    params = request.POST.dict()
+    required = {
+        'img_url': {'requried': True}
+    }
+    check_res = check(required, params)
+    if check_res is None or check_res['code'] != 0:
+        return JsonResponse(check_res)
+
+    dt = datetime.now()
+    url_mid = 'dynamic/{0}/{1}/{2}'.format(dt.year, dt.month, dt.day)
+    dir = '{0}/{1}'.format(settings.MEDIA_ROOT, url_mid)
+    if not os.path.exists(dir):
+        os.makedirs(dir)
+
+    fname = '{0}_{1}.jpg'.format(time.strftime('%Y%m%d%H%M%S', time.localtime(time.time())),
+                                 random.randint(1, 1000000))
+    path = '{0}/{1}'.format(dir, fname)
+    try:
+        r = requests.get(params['img_url'])
+        with open(path, "wb") as code:
+            code.write(r.content)
+
+        res['data']='{0}/media/{1}/{2}'.format(URL_PREFIX, url_mid, fname)
+
+    except Exception as e:
+        res = {'code': -2, 'msg': e.__str__(), 'data': []}
     return JsonResponse(res)
