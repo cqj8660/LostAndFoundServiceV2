@@ -1,4 +1,4 @@
-## user相关接口   
+## dynamic相关接口   
 * [x] <a href='#categories'>categories</a>   
 * [x] <a href='#create'>create</a>   
 * [x] <a href='#list'>list</a>   
