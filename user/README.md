@@ -38,6 +38,7 @@ params:
 |phone | string| Y | 手机号，前端请在验证码验证后调此接口 |
 |avatar | string| Y | 头像url（微信头像） |
 |nickname | string | Y | 用户微信名 |
+
 return:
 ```json
 {
