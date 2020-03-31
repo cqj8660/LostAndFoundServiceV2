@@ -193,7 +193,7 @@ return:
 
 
 ### <a name='apply'>update</a> 更新动态   
-url = {domain}/service/dynamic/apply   
+url = {domain}/service/dynamic/update   
 method = post   
 params:   
 
